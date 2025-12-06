@@ -1,0 +1,14 @@
+INSERT INTO users (username, email, password_hash, full_name)
+VALUES ('sahadeo', 'sahadeo@example.com', '<bcrypt-hash>', 'Sahadeo G');
+
+INSERT INTO accounts (user_id, name, currency, balance)
+VALUES (1, 'Personal Wallet', 'INR', 10000);
+
+INSERT INTO categories (user_id, name, type)
+VALUES (1, 'Salary', 'INCOME'),
+       (1, 'Groceries', 'EXPENSE'),
+       (1, 'Transport', 'EXPENSE');
+
+INSERT INTO transactions (user_id, account_id, category_id, amount, type, description, transaction_at)
+VALUES (1, 1, 1, 50000, 'INCOME', 'Monthly Salary', '2025-09-01T10:00:00+05:30'),
+       (1, 1, 2, 1200.50, 'EXPENSE', 'Weekly groceries', '2025-09-05T18:00:00+05:30');
