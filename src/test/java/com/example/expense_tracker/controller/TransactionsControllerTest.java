@@ -2,6 +2,7 @@ package com.example.expense_tracker.controller;
 
 import com.example.expense_tracker.dto.TransactionDTO;
 import com.example.expense_tracker.entity.Category;
+import org.springframework.http.MediaType;
 import com.example.expense_tracker.service.TransactionProducer;
 import com.example.expense_tracker.service.impl.TransactionServiceImpl;
 import com.example.expense_tracker.util.mapper.TransactionMapper;
@@ -16,10 +17,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TransactionsController.class) // loads only MVC stuff + this controller.
 @AutoConfigureMockMvc(addFilters = false) // disable security filters for this test
@@ -63,5 +65,23 @@ public class TransactionsControllerTest {
         mockMvc.perform(get("/api/v1/transactions/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("sahadeo"));
+    }
+
+    @Test
+    void shouldReturn400WhenUsernameIsBlank() throws Exception {
+
+        String json = """
+        {
+          "username": "",
+          "accountName": "Saving"
+        }
+        """;
+
+        mockMvc.perform(post("/api/v1/transactions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors.username")
+                        .value("Username is required"));
     }
 }

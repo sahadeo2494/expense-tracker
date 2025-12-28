@@ -42,13 +42,14 @@ public class TransactionsController {
 
     @PostMapping
     public ResponseEntity<TransactionDTO> createTransaction(@Valid @RequestBody TransactionDTO transactionDTO){
+        System.out.println("Controller hit!");
         TransactionDTO created = transactionService.createTransaction(transactionDTO);
         URI location = URI.create("/api/v1/transactions/" + created.getId());
         return ResponseEntity.created(location).body(created);  // 201 + body + Location
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TransactionDTO> createTransaction(@Valid @PathVariable Long id,
+    public ResponseEntity<TransactionDTO> updateTransaction(@Valid @PathVariable Long id,
                                             @Valid @RequestBody TransactionDTO transactionDTO){
         return ResponseEntity.ok(transactionService.updateTransaction(id ,transactionDTO));
     }

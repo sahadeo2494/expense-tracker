@@ -11,6 +11,7 @@ import com.example.expense_tracker.repository.TransactionRepository;
 import com.example.expense_tracker.service.TransactionService;
 import com.example.expense_tracker.util.mapper.TransactionMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +36,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionDTO getTransactionById(Long id) {
         Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Transaction not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction not found: " + id));
         return transactionMapper.toDTO(transaction);
     }
 
@@ -83,7 +84,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         // Get Transaction
         Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow( () -> new RuntimeException("Transaction not found: " + id));
+                .orElseThrow( () -> new  ResourceNotFoundException("Transaction not found: " + id));
 
         // Validate Ownership/ Authorization
         if (!transaction.getUser().getId().equals(user.getId())){
@@ -109,7 +110,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void deleteTransaction(Long id) {
-        if(!transactionRepository.existsById(id)) throw new RuntimeException("Transaction not found : " + id);
+        if(!transactionRepository.existsById(id)) throw new ResourceNotFoundException("Transaction not found: " + id);
 
         transactionRepository.deleteById(id);
     }
