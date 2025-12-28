@@ -6,6 +6,8 @@ import com.example.expense_tracker.service.impl.UserServiceImpl;
 import com.example.expense_tracker.util.mapper.UserMapper;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +21,7 @@ import java.util.List;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserServiceImpl userService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -45,6 +47,7 @@ public class UserController {
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO){
         User user = userMapper.toEntity(userDTO);
         user.setPasswordHash(passwordEncoder.encode(userDTO.getPassword()));
+        log.debug("User",user);
         return ResponseEntity.ok(userMapper.toDTO(userService.createUser(user)));
     }
 

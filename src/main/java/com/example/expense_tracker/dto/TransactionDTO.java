@@ -14,9 +14,9 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter             // generates getters, setters, toString, equals, hashCode
+@NoArgsConstructor  // generates no-args constructor
+@AllArgsConstructor // generates all-args constructor--
 @Builder
 public class TransactionDTO {
 
